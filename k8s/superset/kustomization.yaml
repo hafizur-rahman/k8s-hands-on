@@ -1,0 +1,12 @@
+secretGenerator:
+- name: mysql-pass
+  literals:
+  - password=SuperSecr4t!
+configMapGenerator:
+- name: superset-config
+  files:
+  - superset_config.py
+
+resources:
+  - superset-deployment.yaml
+  - superserve-deployment.yaml

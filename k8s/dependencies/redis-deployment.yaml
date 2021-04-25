@@ -1,0 +1,57 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: superset-redis
+  labels:
+    app: superset
+spec:
+  selector:
+    app: superset
+    tier: redis
+  ports:
+  - port: 6379
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superset-redis
+spec:
+  selector:
+    matchLabels:
+      app: superset
+  template:
+    metadata:
+      labels:
+        app: superset
+    spec:
+      containers:
+      - name: redis
+        image: redis:5.0.4
+        command:
+          - redis-server
+          - "/redis-master/redis.conf"
+        env:
+          - name: MASTER
+            value: "true"
+        ports:
+        - containerPort: 6379
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        volumeMounts:
+          - mountPath: /redis-master-data
+            name: data
+          - mountPath: /redis-master
+            name: config
+      volumes:
+        - name: data
+          emptyDir: {}
+        - name: config
+          configMap:
+            name: redis-config
+            items:
+              - key: redis-config
+                path: redis.conf
+

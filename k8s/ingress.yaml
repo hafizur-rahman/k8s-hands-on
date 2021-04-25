@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: superset
+  labels:
+      name: superset
+spec:
+  rules:
+  - http:
+      paths:
+      - pathType: Prefix
+        path: /
+        backend:
+          service:
+            name: superset
+            port:
+              number: 8088
+      - pathType: Prefix
+        path: /api
+        backend:
+          service:
+            name: superset
+            port:
+              number: 8088
+      - pathType: Prefix
+        path: /vizapp
+        backend:
+          service:
+            name: superserve
+            port:
+              number: 8089

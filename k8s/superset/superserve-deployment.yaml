@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: superserve
+spec:
+  selector:
+    app: superserve
+  ports:
+  - port: 8089
+    targetPort: 80
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: superserve
+spec:
+  selector:
+    matchLabels:
+      app: superserve
+  template:
+    metadata:
+      labels:
+        app: superserve
+    spec:
+      containers:
+      - name: superserve
+        image: superserve
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80

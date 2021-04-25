@@ -1,0 +1,13 @@
+secretGenerator:
+- name: mysql-pass
+  literals:
+  - password=SuperSecr4t!
+
+configMapGenerator:
+- name: redis-config
+  files:
+  - redis-config
+
+resources:
+  - mysql-deployment.yaml
+  - redis-deployment.yaml
